@@ -3,16 +3,11 @@
  *
  * Written By:
  * Skylar Chan
+ * Copyright 2021
  * 
- *  wiiuse
- *
- *  Written By:
+ *  Based on wiiuse example written By:
  *      Michael Laforest    < para >
  *      Email: < thepara (--AT--) g m a i l [--DOT--] com >
- *
- *  Copyright 2006-2007
- *
- *  This file is part of wiiuse.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
