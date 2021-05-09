@@ -1,6 +1,8 @@
 # twiirl
 Play sounds by moving a Nintendo Wii remote
 
+Twiirl is my [DCC capstone project](http://dcc.umd.edu/learning/capstone/).
+
 ## Abstract
 
 Twiirl (pronounced "twirl") is a cross-platform music synthesizer controlled by a Nintendo Wii remote. It continuously plays sound which can be altered by moving the remote. The effect is that it is possible to correlate motion and music, and to hear what a direction such as "forward" sounds like. Twiirl is free and open source software, enabling others the freedom to study and customize the code to produce other sounds and extend Twiirl as they please. Overall Twiirl integrates music, sound, motion, and software to explore a new audio, visual and physical representation of music as organized sound. The major contribution is to visualize motion as music and to demonstrate the potential for a tool that generates its own music for use in a dance performance.
