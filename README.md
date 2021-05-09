@@ -90,6 +90,8 @@ Twiirl does not play any sounds on startup, press the Home button to start it. T
 
 To quit, press Ctrl-C on the keyboard, or the power button on the Wii remote.
 
+On Windows you might have to wait 10-15 seconds before pressing Home for Wii motion plus to activate.
+
 When holding the Wii remote in the vertical orientation:
 
 Button     | Action

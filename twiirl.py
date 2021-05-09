@@ -131,12 +131,12 @@ s.start()
 p = Popen([PATH_TO_TWIIRL_X], stdout=PIPE, bufsize=1, text=True)
 try:
     frq = 0
-    for line in p.stdout:        
+    for line in p.stdout:
         try:
             floats = [float(i) for i in line.split()]
-            # pad array to size 7, in case there is no wii motion plus
+            # pad array to size 8, in case there is no wii motion plus
             # this is the case for windows
-            floats += [0] * (7 - len(floats))
+            floats += [0] * (8 - len(floats))
             # mroll/mpitch/myaw are similar to acceleration but not exactly the same
             roll, aroll, pitch, apitch, yaw, mroll, mpitch, myaw = floats
 
@@ -170,6 +170,8 @@ try:
             cmd = commands.get(line.strip())
             if cmd:
                 cmd()
+            else:
+                print(line)
 except KeyboardInterrupt:
     stop_twiirl(p, 0)
 
