@@ -42,8 +42,10 @@ Open the Visual Studio developer command prompt then type:
 
 ```
 cd path/to/twiirl/folder
-cl.exe twiirl.c wiiuse.lib /I ../wiiuse/src
+cl.exe twiirl.c wiiuse.lib /I /path/to/wiiuse/src/folder
 ```
+
+For example if wiiuse and twiirl are in the same parent directory, the path to the wiiuse folder is `../wiiuse/src`
 
 This will also produce `twiirl.exe`.
 
@@ -63,7 +65,7 @@ On Linux you might have to use the Jack audio server.
 
 **Linux**
 
-Make sure bluetooth is on and that in the terminal you're in the twiirl folder.
+Make sure bluetooth is on and that in the terminal you're in the twiirl folder, then type
 
 ```
 python3 twiirl.py
@@ -84,11 +86,11 @@ python.exe twiirl.py
 
 ## Controls
 
-Twiirl does not play any sounds on startup, press the Home button to start it. Then move the Wii remote to play sounds
+Twiirl does not play any sounds on startup, press the Home button to start it. Then move the Wii remote to play sounds.
 
 To quit, press Ctrl-C on the keyboard, or the power button on the Wii remote.
 
-When holding Wii Remote in vertical motion:
+When holding the Wii remote in the vertical orientation:
 
 Button     | Action
 ---------- | -----------
