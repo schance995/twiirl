@@ -63,17 +63,22 @@ On Linux you might have to use the Jack audio server.
 
 **Linux**
 
+Make sure bluetooth is on and that in the terminal you're in the twiirl folder.
+
 ```
 python3 twiirl.py
 ```
 
-Pair the Wii remote as Twiirl is starting.
+Then press the red sync button at the back the Wii remote as Twiirl is starting.
 
 **Windows**
 
-Pair the Wii remote before running Twiirl.
+Make sure bluetooth is on, then open Control Panel -> Add a device and add the Wii remote. The Wii remote should be paired before running Twiirl.
+
+Then open a terminal (Powershell will do) and type
 
 ```
+cd path/to/twiirl/folder
 python.exe twiirl.py
 ```
 
