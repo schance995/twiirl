@@ -84,29 +84,23 @@ python.exe twiirl.py
 
 ## Controls
 
-Twiirl does not play any sounds on startup, press the Home button start it.
+Twiirl does not play any sounds on startup, press the Home button to start it. Then move the Wii remote to play sounds
 
-To quit, press Ctrl-C on the keyboard, or the power button on the Wii Remote.
+To quit, press Ctrl-C on the keyboard, or the power button on the Wii remote.
 
 When holding Wii Remote in vertical motion:
 
-Home = toggle Wii Remote motion reporting
-
-Up = toggle sine
-
-Down = toggle saw
-
-Left = toggle square
-
-Right = toggle triangle
-
-Plus = raise volume
-
-Minus = lower volume
-
-One = increase pitch transition delay (more smooth)
-
-Two = decrease pitch transition delay (more beepy)
+Button     | Action
+---------- | -----------
+Home       | toggle Wii Remote motion reporting
+Up         | toggle sine
+Down       | toggle saw
+Left       | toggle square
+Right      | toggle triangle
+Plus       | raise volume
+Minus      | lower volume
+One        | increase pitch transition delay (more smooth)
+Two        | decrease pitch transition delay (more beepy)
 
 ## How it works
 
