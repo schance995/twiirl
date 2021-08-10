@@ -1,5 +1,5 @@
 twiirlmake: twiirl.c
-	gcc twiirl.c -o twiirl.x -lwiiuse
+	gcc twiirl.c -o twiirl.exe -lwiiuse
 
 clean:
-	$(RM) twiirl.x
+	$(RM) twiirl.exe
