@@ -24,13 +24,11 @@ import sys
 import os
 import math
 
-# get path of twiirl executable, defaults to twiirl.x in same directory if environment variable is not provided
+# get path of twiirl executable, defaults to twiirl.exe in same directory if environment variable is not provided
 PATH_TO_TWIIRL_X = os.getenv('PATH_TO_TWIIRL_X', os.path.abspath(os.path.join(os.path.dirname(__file__), 'twiirl.exe')))
-# print(PATH_TO_TWIIRL_X)
 
 # boot the server
-s = Server().boot()
-
+s = Server(audio='jack').boot()
 # lower volume
 s.amp = 0.1
 
@@ -54,6 +52,22 @@ sin = Sine(freq = sin_f).out()
 saw = SuperSaw(freq = saw_f, detune = saw_detune) # , bal = saw_balance)
 square = LFO(type=2, freq = square_f, sharp = square_sharp)
 triangle = LFO(type=3, freq = triangle_f, sharp = triangle_sharp)
+
+def make_melody():
+    wav = SquareTable()
+    env = CosTable([(0,0), (100,1), (500,.3), (8191,0)])
+    met = Metro(.125, 12).play()
+    amp = TrigEnv(met, table=env, dur=1)
+    pit = TrigXnoiseMidi(met, dist='loopseg', x1=20, scale=1, mrange=(48,84))
+    osc = Osc(table=wav, freq=pit, mul=amp)
+    return osc
+
+melody = make_melody()
+
+chaos_chaos = SigTo(value = 0.7, time = t)
+chaos_add = SigTo(value = 500, time = t)
+strange = ChenLee(0.005, chaos=chaos_chaos, stereo=True, mul=250, add=chaos_add)
+chaos = LFO(strange)
 
 def togglesound(sound, name):
     if sound.isOutputting():
@@ -83,11 +97,19 @@ def adjustdelay(fun):
         print('Triangle frequency delay', triangle_f.time)
         triangle_sharp.time = fun(triangle_sharp.time)
         print('Triangle sharp delay', triangle_sharp.time)
+    if melody.isOutputting():
+        melody.mul.setDur(fun(melody.mul.dur))
+        print('Melody delay', melody.mul.dur)
+    if chaos.isOutputting():
+        chaos_chaos.time = fun(chaos_chaos.time)
+        print('Chaos time delay', chaos_chaos.time)
+        chaos_add.time = fun(chaos_add.time)
+        print('Chaos add delay', chaos_add.time)
 
 def A():
-    pass
+    togglesound(melody, 'melody')
 def B():
-    pass
+    togglesound(chaos, 'chaos')
 def Up():
     togglesound(sin, 'sine')
 def Down():
@@ -104,10 +126,9 @@ def Minus():
     s.amp = s.amp/1.25
     print('Server volume', s.amp)
 def One():
-    adjustdelay(lambda t: min(3, t*1.25))
+    adjustdelay(lambda t: min(10, t*1.25))
 def Two():
-    adjustdelay(lambda t: t / 1.25)
-
+    adjustdelay(lambda t: max(0.01, t / 1.25))
 
 commands={"A": A, "B": B, "Up": Up, "Down": Down, "Left": Left, "Right": Right, "Plus": Plus, "Minus": Minus, "One": One, "Two": Two} # no home command
 
@@ -136,7 +157,7 @@ try:
         try:
             floats = [float(i) for i in line.split()]
             # pad array to size 8, in case there is no wii motion plus
-            # this is the case for windows
+            # this is the case for windows, if pairing is unsuccessful
             floats += [0] * (8 - len(floats))
             # mroll/mpitch/myaw are similar to acceleration but not exactly the same
             roll, aroll, pitch, apitch, yaw, mroll, mpitch, myaw = floats
@@ -145,12 +166,12 @@ try:
             # sound smoothly rotates at the -180/180 boundary: use abs(pitch) or abs(roll)
             frq = abs(pitch)/180*1000+500
             # save cpu by checking if sound is outputting first
-            
+
             if saw.isOutputting():
                 saw_detune.value = abs(roll)/180
                 saw_f.value = frq
             # saw_balance.value = abs(roll+pitch)/360
-                
+
             # steering wheel motion, as in mariokart                
             frq += myaw*5 # pitch and myaw together
             if sin.isOutputting():
@@ -165,14 +186,22 @@ try:
                 # rotate wiimote in axis of +&- buttons
                 triangle_f.value = (roll + 180)/360*1000 + 500
                 triangle_sharp.value = (abs(roll + pitch)/360 + 1)/2
-            
-            
+
+            if melody.isOutputting():
+                vals = [int(abs(roll)), int(abs(pitch))]
+                melody.freq.setRange(min(vals), max(vals))
+
+            if chaos.isOutputting():
+                chaos_add.value = abs(roll+pitch+yaw) + abs(mroll) + abs(mpitch)
+                chaos_chaos.value = 1/(10*abs(myaw)+0.001)
+
         except (TypeError, ValueError): # line is not series of numbers
             cmd = commands.get(line.strip())
             if cmd:
                 cmd()
             else:
                 print(line)
+
 except KeyboardInterrupt:
     stop_twiirl(p, 0)
 
