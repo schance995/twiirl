@@ -1,7 +1,10 @@
 # twiirl
+
 Play sounds by moving a Nintendo Wii remote
 
 Twiirl is my [DCC capstone project](http://dcc.umd.edu/learning/capstone/).
+
+Source code is available at <https://github.com/schance995/twiirl>.
 
 ## Abstract
 
@@ -114,9 +117,13 @@ Minus            | lower volume
 One              | increase pitch transition delay (more smooth)
 Two              | decrease pitch transition delay (more beepy)
 
+Twiirl is CPU intensive, if there are delays when multiple sounds are playing, you should look into lowering your latency (such as with realtime privileges).
+
 ## How it works
 
 `twiirl.exe` prints gyroscope values from the Wii remote. `twiirl.py` reads them from standard input via a subprocess and converts them into sound. See the source code for more details.
+
+In theory Twiirl can be controlled by another game controller such as JoyCons. Additionally, an arbitrary image or video could be transformed into a series of numbers and feed into Twiirl, so we can hear what they sound like.
 
 ## License
 

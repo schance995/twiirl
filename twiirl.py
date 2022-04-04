@@ -28,7 +28,7 @@ import math
 PATH_TO_TWIIRL_X = os.getenv('PATH_TO_TWIIRL_X', os.path.abspath(os.path.join(os.path.dirname(__file__), 'twiirl.exe')))
 
 # boot the server
-s = Server(audio='jack').boot()
+s = Server(audio='jack', buffersize=1024).boot()
 # lower volume
 s.amp = 0.1
 
@@ -48,10 +48,10 @@ triangle_f = SigTo(value = 0, time = t)
 triangle_sharp = SigTo(value = 0.5, time = t)
 
 # the sounds
-sin = Sine(freq = sin_f).out()
-saw = SuperSaw(freq = saw_f, detune = saw_detune) # , bal = saw_balance)
-square = LFO(type=2, freq = square_f, sharp = square_sharp)
-triangle = LFO(type=3, freq = triangle_f, sharp = triangle_sharp)
+sin = Sine(freq = [sin_f*3/2, sin_f])
+saw = SuperSaw(freq = [saw_f*4/3, saw_f], detune = saw_detune) # , bal = saw_balance)
+square = LFO(type=2, freq = [square_f, square_f*6/5], sharp = square_sharp)
+triangle = LFO(type=3, freq = [triangle_f, triangle_f*7/4], sharp = triangle_sharp)
 
 def make_melody():
     wav = SquareTable()
@@ -67,7 +67,7 @@ melody = make_melody()
 chaos_chaos = SigTo(value = 0.7, time = t)
 chaos_add = SigTo(value = 500, time = t)
 strange = ChenLee(0.005, chaos=chaos_chaos, stereo=True, mul=250, add=chaos_add)
-chaos = LFO(strange)
+chaos = LFO(type=4, freq = strange)
 
 def togglesound(sound, name):
     if sound.isOutputting():
@@ -138,7 +138,7 @@ def stop_twiirl(p, code=None):
     if not isinstance(code, int):
         code = p.returncode
     print('Stopping Twiirl / Pyo...')
-    s.stop()
+    s.shutdown()
     print('Thanks for using Twiirl!')
     sys.exit(code)
 
@@ -151,6 +151,7 @@ s.start()
 # stdout = PIPE means that if python quits then twiirl also quits
 # bufsize = 1 forces unbuffered input, aka process each line individually
 p = Popen([PATH_TO_TWIIRL_X], stdout=PIPE, bufsize=1, text=True)
+print('Please connect the Wii remote to Twiirl in 30 seconds')
 try:
     frq = 0
     for line in p.stdout:
@@ -172,7 +173,7 @@ try:
                 saw_f.value = frq
             # saw_balance.value = abs(roll+pitch)/360
 
-            # steering wheel motion, as in mariokart                
+            # steering wheel motion, as in mariokart
             frq += myaw*5 # pitch and myaw together
             if sin.isOutputting():
                 sin_f.value = frq
@@ -180,7 +181,7 @@ try:
             if square.isOutputting():
                 square_f.value = abs(mroll)*0.4+abs(mpitch)*0.4+abs(myaw)*0.4
                 square_sharp.value = abs(roll)/180
-            
+
             if triangle.isOutputting():
                 # scale motion, where sound dips at the -180/180 boundary
                 # rotate wiimote in axis of +&- buttons
@@ -192,7 +193,7 @@ try:
                 melody.freq.setRange(min(vals), max(vals))
 
             if chaos.isOutputting():
-                chaos_add.value = abs(roll+pitch+yaw) + abs(mroll) + abs(mpitch)
+                chaos_add.value = abs(roll+pitch+yaw) + abs(mroll) + abs(mpitch) - 20
                 chaos_chaos.value = 1/(10*abs(myaw)+0.001)
 
         except (TypeError, ValueError): # line is not series of numbers

@@ -4,7 +4,7 @@
  * Written By:
  * Skylar Chan
  * Copyright 2021
- * 
+ *
  *  Based on wiiuse example written By:
  *      Michael Laforest    < para >
  *      Email: < thepara (--AT--) g m a i l [--DOT--] com >
@@ -36,7 +36,7 @@
 
 #include <stdio.h>                      /* for printf */
 /* #include <string.h> */
-#include <stdbool.h> 
+#include <stdbool.h>
 
 #include "wiiuse.h"                     /* for wiimote_t, classic_ctrl_t, etc */
 
@@ -45,7 +45,7 @@
 #endif
 
 #define MAX_WIIMOTES 4
-#define TIMEOUT 5
+#define TIMEOUT 30
 
 #define NUM_BUTTONS 10
 
@@ -71,7 +71,7 @@ bool motion_on = false;
 void handle_event(struct wiimote_t* wm) {
     /* printf("\n\n--- Wiimote %i ---\n", wm->unid); */
     /* if a button is pressed, report it */
-    
+
     for (int i = 0; i < NUM_BUTTONS; i ++) {
 //        if (IS_HELD(wm, buttons[i])) {
 //            printf("%s held\n", labels[i]);
@@ -98,7 +98,7 @@ void handle_event(struct wiimote_t* wm) {
             wiiuse_set_motion_plus(wm, 0); // off
         }
     }
-    
+
     /* if the accelerometer is turned on then print angles */
     if (WIIUSE_USING_ACC(wm)) {
         // ranges from -180 to 180 degrees
@@ -116,7 +116,7 @@ void handle_event(struct wiimote_t* wm) {
 	printf("\n");
     }
     // prints continuously
-    
+
     // output to parse is roll, absolute roll, pitch, absolute pitch, yaw, gryo pitch, gyro roll, gyro yaw
 }
 
@@ -207,7 +207,7 @@ int main(int argc, char** argv) {
      *  This will return the number of actual wiimotes that are in discovery mode.
      */
     printf("You are running Twiirl v0\n"
-           "Please connect the Wiimote to Twiirl\n");
+           "Please connect the Wiimote to Twiirl within 30 seconds\n");
     found = wiiuse_find(wiimotes, MAX_WIIMOTES, TIMEOUT);
     if (!found) {
         printf("No wiimotes found.\n"
